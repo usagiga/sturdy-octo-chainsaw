@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "difit": {
+      "source": "yoshiko-pg/difit",
+      "sourceType": "github",
+      "skillPath": "skills/difit/SKILL.md",
+      "computedHash": "9d1645b701e6af643e78a9efa6e0bd1e65492400fe29134a6a4b3e02274d672b"
+    },
+    "difit-review": {
+      "source": "yoshiko-pg/difit",
+      "sourceType": "github",
+      "skillPath": "skills/difit-review/SKILL.md",
+      "computedHash": "45e031d6d7507ee610b643fd71caa52266f40542ea8fe55503442f844b24f606"
+    }
+  }
+}
