@@ -1,8 +1,6 @@
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import { getPublishedPosts } from "~/lib/posts";
 
-// Placeholder home page. The real listing page (blog-post-list) lands in a
-// later change on this stack; this only proves the content pipeline works.
 export default function Home() {
 	const posts = getPublishedPosts();
 	return (
@@ -12,7 +10,18 @@ export default function Home() {
 				<For each={posts}>
 					{(post) => (
 						<li>
-							{post.frontmatter.date} - {post.frontmatter.title} ({post.slug})
+							<a href={`/blog/${post.slug}`}>{post.frontmatter.title}</a>
+							<div>{post.frontmatter.date}</div>
+							<Show when={post.frontmatter.tags}>
+								<ul>
+									<For each={post.frontmatter.tags}>
+										{(tag) => <li>{tag}</li>}
+									</For>
+								</ul>
+							</Show>
+							<Show when={post.frontmatter.description}>
+								<p>{post.frontmatter.description}</p>
+							</Show>
 						</li>
 					)}
 				</For>
