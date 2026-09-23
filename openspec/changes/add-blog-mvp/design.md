@@ -4,7 +4,7 @@
 
 リポジトリは現在空で、`package.json` すら存在しない。技術スタックはBun / SolidJS / Biomeと決まっており、SolidJSのメタフレームワークであるSolidStartを採用する（セットアップ負荷を抑えたい個人ブログのため）。動機は proposal.md - Why を参照。
 
-SolidStartは `server.prerender` 設定によりビルド時のプリレンダリング（SSG）をサポートしており、`with-mdx` 相当のMDX統合テンプレートが存在する。Biomeは2026年時点でMarkdown自体のフォーマット/lintを新たにサポートしたが、MDX固有のサポートは別扱いで確立していない。
+SolidStart v2はサーバーエンジンとしてNitro v3を使い、`vite.config.ts` 内の `nitro()` プラグインの `static: true`（内部的には `prerender.crawlLinks: true` 相当）によりビルド時のプリレンダリング（SSG）をサポートしている。`create-solid`（`--solidstart --v2`）には `with-mdx` テンプレートが用意されており、これをベースにスキャフォールドした（実装時に実機検証済み）。Biomeは2026年時点でMarkdown自体のフォーマット/lintを新たにサポートしたが、MDX固有のサポートは別扱いで確立していない。
 
 ## Goals / Non-Goals
 
@@ -30,12 +30,12 @@ SolidStartは `server.prerender` 設定によりビルド時のプリレンダ�
 `content/posts/<filename>.mdx` の `<filename>` をそのままスラッグとして使う。frontmatterにスラッグを持たせない。ファイル名とURLが常に一致するため、記事作成時に迷う余地がない（探索での合意事項）。
 
 ### frontmatter解析ライブラリ
-`gray-matter`（または同等のfrontmatterパーサー）を用いて、MDXファイル先頭のYAML frontmatterを本文と分離して解析する。SolidStartのMDX統合が標準でfrontmatterをexportとして扱える場合はそちらを優先し、扱えない場合のフォールバックとして `gray-matter` を導入する。
+`@mdx-js/rollup` の `remarkPlugins` に `remark-frontmatter` + `remark-mdx-frontmatter` を追加し、MDXファイル先頭のYAML frontmatterを `frontmatter` という名前付きexportとしてコンパイル時に分離する。この方式はMDXコンパイルパイプラインに完全に統合されるため、`gray-matter` のような別ライブラリによるファイル再パースは不要と実装時に判明し、採用した。
 
 ### プリレンダリング方式: `crawlLinks` によるリンク追跡
-`server.prerender.crawlLinks: true` を設定し、ルート(`/`、一覧ページ)から始めてレンダリングされたHTML中の `<a href>` を辿る形で全記事詳細ページを自動的にプリレンダリング対象に含める。
+`vite.config.ts` の `nitro({ static: true })` を設定し、ルート(`/`、一覧ページ)から始めてレンダリングされたHTML中の `<a href>` を辿る形で全記事詳細ページを自動的にプリレンダリング対象に含める（Nitro内部では `prerender.crawlLinks: true` に相当）。
 
-代替案として、`import.meta.glob` で得たスラッグ一覧を `server.prerender.routes` に明示的に渡す方法も検討した。この方法はビルド設定側でも記事一覧を把握する必要があり、コンテンツ側（ルートコンポーネント）と設定側の二重管理になる。`crawlLinks` であれば一覧ページのリンクが唯一の情報源になるため、こちらを採用する。draft記事は一覧ページにリンクが出力されないため、`crawlLinks` からも自然に除外される。
+代替案として、`import.meta.glob` で得たスラッグ一覧を `prerender.routes` に明示的に渡す方法も検討した。この方法はビルド設定側でも記事一覧を把握する必要があり、コンテンツ側（ルートコンポーネント）と設定側の二重管理になる。`crawlLinks` であれば一覧ページのリンクが唯一の情報源になるため、こちらを採用する。draft記事は一覧ページにリンクが出力されないため、`crawlLinks` からも自然に除外される。
 
 ### Biomeの適用範囲
 Biomeは `.ts` / `.tsx` などのコードに対してlint/formatを適用する。`.mdx` ファイル内のMarkdown/JSXに対する自動フォーマットは、Biome側のMDXサポートが未確立のため本変更では対象外とする（Non-Goals参照）。
@@ -44,4 +44,4 @@ Biomeは `.ts` / `.tsx` などのコードに対してlint/formatを適用する
 
 - [Biomeが `.mdx` を公式サポートしていない] → 記事本文のフォーマットは手動に委ねる。将来BiomeのMarkdown/MDXサポートが拡充された時点で再検討する。
 - [`crawlLinks` はリンクを辿れない孤立ページを検出できない] → 本変更のスコープでは一覧ページが全記事へのリンクを持つため問題にならない。将来ページが増えて一覧からリンクされない記事ページが生まれる場合は、明示的な `routes` 指定への切り替えを検討する。
-- [SolidStartのMDX統合とfrontmatter解析の連携が期待通り動かない可能性] → 実装時に標準統合で解析できない場合は `gray-matter` によるフォールバックで対応する（Decisions参照）。
+- [Nitro v3は本稿執筆時点でbetaリリース（date-versioned `-beta` タグ）が `latest` distタグになっている] → scaffold直後の固定バージョンで `bun run build` がRolldown/Vite 8まわりのエラーで失敗する事象を実装時に確認したため、最新betaへ明示的に更新して解消した（`package.json` にバージョンを固定）。将来安定版がリリースされ次第、追随を検討する。

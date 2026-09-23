@@ -1,0 +1,29 @@
+body {
+	font-family:
+		Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+		sans-serif;
+	margin: 0;
+	color: #222;
+}
+
+header,
+footer {
+	padding: 1rem 1.5rem;
+}
+
+header a {
+	font-weight: bold;
+	text-decoration: none;
+	color: #335d92;
+}
+
+main {
+	max-width: 40rem;
+	margin: 0 auto;
+	padding: 1rem 1.5rem;
+}
+
+footer {
+	text-align: center;
+	color: #666;
+}

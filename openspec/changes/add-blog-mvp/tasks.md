@@ -2,16 +2,16 @@
 
 ## 1. プロジェクト基盤
 
-- [ ] 1.1 Bun + SolidStart でプロジェクトを初期化し、`bun run dev` で開発サーバーが起動することを確認する
-- [ ] 1.2 Biomeを導入し、`biome.json` の設定と `bun run lint` / `bun run format` 相当のスクリプトを `package.json` に追加して実行できることを確認する
-- [ ] 1.3 最低限のページレイアウト（ヘッダー/フッター/共通ページ枠）を実装し、開発サーバー上でトップページに表示されることを目視確認する
+- [x] 1.1 Bun + SolidStart でプロジェクトを初期化し、`bun run dev` で開発サーバーが起動することを確認する
+- [x] 1.2 Biomeを導入し、`biome.json` の設定と `bun run lint` / `bun run format` 相当のスクリプトを `package.json` に追加して実行できることを確認する
+- [x] 1.3 最低限のページレイアウト（ヘッダー/フッター/共通ページ枠）を実装し、開発サーバー上でトップページに表示されることを目視確認する
 
 ## 2. コンテンツパイプライン (`blog-content`)
 
-- [ ] 2.1 `content/posts/` ディレクトリを作成し、`import.meta.glob` を使って `.mdx` ファイル一覧を取得する仕組みを実装する
-- [ ] 2.2 frontmatter解析（`title` / `date` / `tags` / `description` / `draft`、`draft`未指定時は`false`）を実装し、サンプル記事1件を用いてフィールドが正しく解析されることを確認する
-- [ ] 2.3 ファイル名からスラッグを導出するロジックを実装し、`content/posts/my-first-post.mdx` が `my-first-post` になることを確認する
-- [ ] 2.4 `draft: true` の記事をコンテンツ集合の公開対象から除外するフィルタを実装し、draft記事とpublish記事を1件ずつ用意して除外されることを確認する
+- [x] 2.1 `content/posts/` ディレクトリを作成し、`import.meta.glob` を使って `.mdx` ファイル一覧を取得する仕組みを実装する
+- [x] 2.2 frontmatter解析（`title` / `date` / `tags` / `description` / `draft`、`draft`未指定時は`false`）を実装し、サンプル記事1件を用いてフィールドが正しく解析されることを確認する
+- [x] 2.3 ファイル名からスラッグを導出するロジックを実装し、`content/posts/my-first-post.mdx` が `my-first-post` になることを確認する
+- [x] 2.4 `draft: true` の記事をコンテンツ集合の公開対象から除外するフィルタを実装し、draft記事とpublish記事を1件ずつ用意して除外されることを確認する
 
 ## 3. 記事詳細ページ (`blog-post-page`)
 
@@ -28,6 +28,6 @@
 
 ## 5. 静的サイト生成 (`static-site-generation`)
 
-- [ ] 5.1 `server.prerender.crawlLinks: true` をSolidStart設定に追加する
+- [ ] 5.1 `vite.config.ts` の `nitro()` プラグイン設定に `static: true`（全ルートをcrawlLinksでプリレンダー）を追加する
 - [ ] 5.2 公開記事を複数件・draft記事を1件用意した状態で `bun run build` を実行し、ビルド成果物に公開記事ページと一覧ページの静的HTMLが含まれることを確認する
 - [ ] 5.3 同じビルド成果物にdraft記事に対応する静的HTMLが含まれないことを確認する
