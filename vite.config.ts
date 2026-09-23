@@ -19,6 +19,8 @@ export default defineConfig({
 		solidStart({
 			extensions: ["mdx", "md"],
 		}),
-		nitro(),
+		nitro({
+			static: true,
+		}),
 	],
 });
